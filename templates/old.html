@@ -1,0 +1,1005 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Attendance Tracker</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #667eea;
+            --primary-dark: #764ba2;
+            --success: #4CAF50;
+            --danger: #f44336;
+            --warning: #ff9800;
+            --light: #f8f9fa;
+            --dark: #333;
+            --gray: #666;
+            --border: #ddd;
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            --shadow-sm: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: var(--dark);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: var(--shadow);
+            margin-bottom: 40px;
+            text-align: center;
+            animation: slideDown 0.6s ease-out;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        h1 {
+            color: var(--dark);
+            font-size: 2.8em;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .date-display {
+            color: var(--gray);
+            font-size: 1.1em;
+            font-weight: 500;
+        }
+
+        .stats-bar {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 30px;
+            padding-top: 30px;
+            border-top: 3px solid #f0f0f0;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .stat-item {
+            flex: 1;
+            min-width: 150px;
+            padding: 20px;
+            background: linear-gradient(135deg, #f8f9fa 0%, #fff 100%);
+            border-radius: 12px;
+            text-align: center;
+            animation: fadeInUp 0.6s ease-out 0.1s both;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-item::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(102, 126, 234, 0.1) 0%, transparent 70%);
+            animation: shine 3s infinite;
+        }
+
+        @keyframes shine {
+            0% { transform: translate(0, 0); }
+            50% { transform: translate(50px, 50px); }
+            100% { transform: translate(0, 0); }
+        }
+
+        .stat-item:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+            border-color: var(--primary);
+        }
+
+        .stat-number {
+            font-size: 2.5em;
+            font-weight: bold;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin: 10px 0;
+            position: relative;
+            z-index: 1;
+        }
+
+        .stat-label {
+            font-size: 0.95em;
+            color: var(--gray);
+            margin-top: 8px;
+            font-weight: 600;
+            position: relative;
+            z-index: 1;
+        }
+
+        .stat-icon {
+            font-size: 2.5em;
+            margin-bottom: 8px;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: var(--shadow);
+            animation: fadeInUp 0.6s ease-out;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .card h2 {
+            color: var(--primary);
+            margin-bottom: 25px;
+            font-size: 1.6em;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-bottom: 3px solid var(--primary);
+            padding-bottom: 15px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--dark);
+            font-weight: 600;
+            font-size: 0.95em;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 14px;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            font-size: 1em;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        input::placeholder {
+            color: #bbb;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 8px rgba(102, 126, 234, 0.3);
+            transform: scale(1.01);
+        }
+
+        button {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            padding: 14px 28px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            width: 100%;
+            position: relative;
+            overflow: hidden;
+        }
+
+        button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.2);
+            transition: left 0.5s ease;
+        }
+
+        button:hover::before {
+            left: 100%;
+        }
+
+        button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        button:active {
+            transform: translateY(-1px);
+        }
+
+        .student-list {
+            list-style: none;
+            max-height: 450px;
+            overflow-y: auto;
+            padding-right: 10px;
+        }
+
+        .student-list::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .student-list::-webkit-scrollbar-track {
+            background: var(--light);
+            border-radius: 10px;
+        }
+
+        .student-list::-webkit-scrollbar-thumb {
+            background: var(--primary);
+            border-radius: 10px;
+        }
+
+        .student-list::-webkit-scrollbar-thumb:hover {
+            background: var(--primary-dark);
+        }
+
+        .student-item {
+            background: linear-gradient(135deg, var(--light) 0%, #fff 100%);
+            padding: 16px;
+            margin-bottom: 12px;
+            border-radius: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-left: 5px solid var(--primary);
+            transition: all 0.3s ease;
+            animation: slideIn 0.4s ease-out;
+            box-shadow: var(--shadow-sm);
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .student-item:hover {
+            transform: translateX(5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+            background: linear-gradient(135deg, #f0f4ff 0%, #fff 100%);
+        }
+
+        .student-name {
+            font-weight: 600;
+            color: var(--dark);
+            font-size: 1.05em;
+        }
+
+        .student-actions {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .btn-small {
+            padding: 8px 12px;
+            font-size: 0.9em;
+            width: auto;
+            margin: 0;
+            border-radius: 6px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 40px;
+        }
+
+        .btn-present {
+            background: linear-gradient(135deg, #4CAF50, #45a049);
+            color: white;
+        }
+
+        .btn-absent {
+            background: linear-gradient(135deg, #f44336, #da190b);
+            color: white;
+        }
+
+        .btn-late {
+            background: linear-gradient(135deg, #ff9800, #e68900);
+            color: white;
+        }
+
+        .btn-delete {
+            background: #999;
+            color: white;
+            padding: 8px 10px;
+        }
+
+        .btn-small:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-small:active {
+            transform: translateY(0);
+        }
+
+        .btn-small.btn-active {
+            border: 2px solid rgba(0, 0, 0, 0.3);
+            box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-export {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9em;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+        }
+
+        .btn-export:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .report-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 18px;
+            max-height: 450px;
+            overflow-y: auto;
+            padding-right: 10px;
+        }
+
+        .report-grid::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .report-grid::-webkit-scrollbar-track {
+            background: var(--light);
+            border-radius: 10px;
+        }
+
+        .report-grid::-webkit-scrollbar-thumb {
+            background: var(--primary);
+            border-radius: 10px;
+        }
+
+        .report-card {
+            background: linear-gradient(135deg, var(--light) 0%, #fff 100%);
+            padding: 18px;
+            border-radius: 10px;
+            border-left: 5px solid var(--primary);
+            transition: all 0.3s ease;
+            animation: slideIn 0.4s ease-out;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .report-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .report-name {
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 12px;
+            font-size: 1.1em;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--border);
+        }
+
+        .report-stat {
+            display: flex;
+            justify-content: space-between;
+            margin: 8px 0;
+            font-size: 0.95em;
+            align-items: center;
+        }
+
+        .stat-label {
+            color: var(--gray);
+            font-weight: 500;
+        }
+
+        .stat-value {
+            font-weight: 700;
+            font-size: 1.1em;
+            background: rgba(102, 126, 234, 0.1);
+            padding: 2px 8px;
+            border-radius: 4px;
+            min-width: 35px;
+            text-align: center;
+        }
+
+        .stat-present {
+            color: var(--success);
+        }
+
+        .stat-absent {
+            color: var(--danger);
+        }
+
+        .stat-late {
+            color: var(--warning);
+        }
+
+        .message {
+            padding: 16px;
+            border-radius: 8px;
+            margin-bottom: 18px;
+            display: none;
+            animation: slideDown 0.4s ease-out;
+            font-weight: 500;
+            border-left: 4px solid;
+        }
+
+        .message.success {
+            background: #d4edda;
+            color: #155724;
+            border-left-color: #28a745;
+        }
+
+        .message.error {
+            background: #f8d7da;
+            color: #721c24;
+            border-left-color: #f44336;
+        }
+
+        .empty-state {
+            text-align: center;
+            color: #999;
+            padding: 40px 20px;
+            font-style: italic;
+            font-size: 1.05em;
+        }
+
+        .progress-ring {
+            transform: rotate(-90deg);
+            transform-origin: 50% 50%;
+        }
+
+        .progress-ring-circle {
+            transition: stroke-dashoffset 0.5s ease;
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+
+            h1 {
+                font-size: 2em;
+            }
+
+            .stats-bar {
+                flex-direction: column;
+            }
+
+            .card {
+                padding: 20px;
+            }
+
+            .student-actions {
+                flex-direction: column;
+                gap: 5px;
+            }
+
+            .btn-small {
+                width: 100%;
+            }
+
+            header {
+                padding: 30px 20px;
+            }
+        }
+
+        .fade-out {
+            animation: fadeOut 0.3s ease-out;
+        }
+
+        @keyframes fadeOut {
+            from {
+                opacity: 1;
+                transform: translateX(0);
+            }
+            to {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📋 Attendance Tracker</h1>
+            <p class="date-display" id="currentDate"></p>
+            <div class="stats-bar">
+                <div class="stat-item">
+                    <div class="stat-icon">🏫</div>
+                    <div class="stat-number" id="totalClasses">0</div>
+                    <div class="stat-label">Classes</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-icon">👥</div>
+                    <div class="stat-number" id="totalStudents">0</div>
+                    <div class="stat-label">Total Students</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-icon">✅</div>
+                    <div class="stat-number" id="presentToday" style="color: #4CAF50;">0</div>
+                    <div class="stat-label">Present Today</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-icon">❌</div>
+                    <div class="stat-number" id="absentToday" style="color: #f44336;">0</div>
+                    <div class="stat-label">Absent Today</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-icon">⏰</div>
+                    <div class="stat-number" id="lateToday" style="color: #ff9800;">0</div>
+                    <div class="stat-label">Late Today</div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Class & Section Management -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-bottom: 30px;">
+            <div class="card">
+                <h2>🏫 Create Class & Section</h2>
+                <div id="classMessage" class="message"></div>
+                <form id="createClassForm">
+                    <div class="form-group">
+                        <label for="className">Class Name</label>
+                        <input type="text" id="className" placeholder="e.g., Class 10, Grade 9" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="section">Section</label>
+                        <select id="section" required>
+                            <option value="">-- Select Section --</option>
+                            <option value="A">A</option>
+                            <option value="B">B</option>
+                            <option value="C">C</option>
+                            <option value="D">D</option>
+                        </select>
+                    </div>
+                    <button type="submit">Create Class</button>
+                </form>
+            </div>
+
+            <div class="card">
+                <h2>📚 Available Classes</h2>
+                <ul id="classesList" class="student-list">
+                    <div class="empty-state">No classes created yet</div>
+                </ul>
+            </div>
+        </div>
+
+        <div class="main-content">
+            <!-- Add Student Section -->
+            <div class="card">
+                <h2>➕ Add Student</h2>
+                <div id="addMessage" class="message"></div>
+                <form id="addStudentForm">
+                    <div class="form-group">
+                        <label for="selectedClass">Select Class</label>
+                        <select id="selectedClass" required>
+                            <option value="">-- Choose a class --</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="studentName">Student Name</label>
+                        <input type="text" id="studentName" placeholder="Enter full name" required autofocus>
+                    </div>
+                    <div class="form-group">
+                        <label for="rollNo">Roll No</label>
+                        <input type="text" id="rollNo" placeholder="Enter roll number">
+                    </div>
+                    <button type="submit">Add Student</button>
+                </form>
+            </div>
+
+            <!-- Mark Attendance Section -->
+            <div class="card">
+                <h2>✅ Mark Attendance</h2>
+                <div id="attendanceMessage" class="message"></div>
+                <form id="markAttendanceForm">
+                    <div class="form-group">
+                        <label for="attendanceClass">Select Class</label>
+                        <select id="attendanceClass" required>
+                            <option value="">-- Choose a class --</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="studentSelect">Select Student</label>
+                        <select id="studentSelect" required>
+                            <option value="">-- Choose a student --</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="statusSelect">Attendance Status</label>
+                        <select id="statusSelect" required>
+                            <option value="present">✓ Present</option>
+                            <option value="absent">✗ Absent</option>
+                            <option value="late">⏱ Late</option>
+                        </select>
+                    </div>
+                    <button type="submit">Mark Attendance</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Students List & Attendance -->
+        <div class="main-content">
+            <div class="card">
+                <h2>👥 Students List</h2>
+                <div class="form-group" style="margin-bottom: 15px;">
+                    <select id="filterClass" onchange="loadStudents()">
+                        <option value="">-- All Classes --</option>
+                    </select>
+                </div>
+                <ul id="studentsList" class="student-list">
+                    <div class="empty-state">No students added yet</div>
+                </ul>
+            </div>
+
+            <!-- Attendance Report -->
+            <div class="card">
+                <h2>📊 Attendance Report</h2>
+                <div id="reportContainer" class="report-grid">
+                    <div class="empty-state">No attendance records yet</div>
+                </div>
+                <button class="btn-export" onclick="exportToExcel()">📊 Export to Excel</button>
+                <button class="btn-export" style="background: linear-gradient(135deg, #f44336, #d32f2f);" onclick="exportToPDF()">📄 Export to PDF</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Update current date and time
+        function updateDate() {
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            const today = new Date().toLocaleDateString('en-US', options);
+            const time = new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+            document.getElementById('currentDate').textContent = `${today} - ${time}`;
+        }
+
+        // Update time every second
+        setInterval(updateDate, 1000);
+
+        // Show message with animation
+        function showMessage(elementId, message, type) {
+            const messageEl = document.getElementById(elementId);
+            messageEl.textContent = message;
+            messageEl.className = `message ${type}`;
+            setTimeout(() => {
+                messageEl.className = 'message';
+            }, 4000);
+        }
+
+        // Get today's date in YYYY-MM-DD format
+        function getTodayDate() {
+            const date = new Date();
+            return date.toISOString().split('T')[0];
+        }
+
+        // Update stats dashboard - FIXED for today's unique students
+        async function updateStats() {
+            try {
+                const today = getTodayDate();
+                
+                // Get all students count
+                const studentsResponse = await fetch('/api/students');
+                const students = await studentsResponse.json();
+                document.getElementById('totalStudents').textContent = students.length;
+
+                // Get today's attendance records (unique per student)
+                const attendanceResponse = await fetch(`/api/attendance/${today}`);
+                const todayRecords = await attendanceResponse.json();
+
+                const presentSet = new Set(todayRecords.filter(r => r.status === 'present').map(r => r.student));
+                const absentSet = new Set(todayRecords.filter(r => r.status === 'absent').map(r => r.student));
+                const lateSet = new Set(todayRecords.filter(r => r.status === 'late').map(r => r.student));
+
+                document.getElementById('presentToday').textContent = presentSet.size;
+                document.getElementById('absentToday').textContent = absentSet.size;
+                document.getElementById('lateToday').textContent = lateSet.size;
+            } catch (error) {
+                console.error('Error updating stats:', error);
+            }
+        }
+
+        // Load students
+        async function loadStudents() {
+            try {
+                const response = await fetch('/api/students');
+                const students = await response.json();
+                
+                // Update students list
+                const studentsList = document.getElementById('studentsList');
+                const studentSelect = document.getElementById('studentSelect');
+                
+                if (students.length === 0) {
+                    studentsList.innerHTML = '<div class="empty-state">No students added yet</div>';
+                    studentSelect.innerHTML = '<option value="">-- Choose a student --</option>';
+                } else {
+                    const today = getTodayDate();
+                    
+                    // Fetch today's records to show status
+                    const attendanceResponse = await fetch(`/api/attendance/${today}`);
+                    const todayRecords = await attendanceResponse.json();
+                    const todayStatus = {};
+                    todayRecords.forEach(r => {
+                        todayStatus[r.student] = r.status;
+                    });
+
+                    studentsList.innerHTML = students.map(student => {
+                        const status = todayStatus[student];
+                        const statusBadge = status ? `<span style="margin-left: 10px; padding: 4px 10px; border-radius: 12px; font-size: 0.8em; font-weight: bold; background: ${status === 'present' ? '#d4edda' : status === 'absent' ? '#f8d7da' : '#fff3cd'}; color: ${status === 'present' ? '#155724' : status === 'absent' ? '#721c24' : '#856404'}">${status.toUpperCase()}</span>` : '';
+                        
+                        return `
+                            <li class="student-item">
+                                <span class="student-name">${student}${statusBadge}</span>
+                                <div class="student-actions">
+                                    <button type="button" class="btn-small btn-present ${status === 'present' ? 'btn-active' : ''}" title="Mark as Present" onclick="markAttendanceQuick('${student}', 'present')">✓</button>
+                                    <button type="button" class="btn-small btn-absent ${status === 'absent' ? 'btn-active' : ''}" title="Mark as Absent" onclick="markAttendanceQuick('${student}', 'absent')">✗</button>
+                                    <button type="button" class="btn-small btn-late ${status === 'late' ? 'btn-active' : ''}" title="Mark as Late" onclick="markAttendanceQuick('${student}', 'late')">⏱</button>
+                                    <button type="button" class="btn-small btn-delete" title="Delete Student" onclick="deleteStudent('${student}')">🗑️</button>
+                                </div>
+                            </li>
+                        `;
+                    }).join('');
+                    
+                    studentSelect.innerHTML = '<option value="">-- Choose a student --</option>' + 
+                        students.map(student => `<option value="${student}">${student}</option>`).join('');
+                }
+                
+                // Update stats
+                updateStats();
+                
+                // Load report
+                loadReport();
+            } catch (error) {
+                console.error('Error loading students:', error);
+            }
+        }
+
+        // Add student
+        document.getElementById('addStudentForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const name = document.getElementById('studentName').value.trim();
+            
+            if (!name || name.length < 2) {
+                showMessage('addMessage', 'Please enter a valid name', 'error');
+                return;
+            }
+            
+            try {
+                const response = await fetch('/api/students', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ name })
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    showMessage('addMessage', `✓ Student "${name}" added successfully!`, 'success');
+                    document.getElementById('studentName').value = '';
+                    document.getElementById('studentName').focus();
+                    loadStudents();
+                } else {
+                    showMessage('addMessage', data.error || 'Error adding student', 'error');
+                }
+            } catch (error) {
+                showMessage('addMessage', 'Error adding student', 'error');
+            }
+        });
+
+        // Mark attendance
+        document.getElementById('markAttendanceForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const student = document.getElementById('studentSelect').value;
+            const status = document.getElementById('statusSelect').value;
+            
+            if (!student) {
+                showMessage('attendanceMessage', 'Please select a student', 'error');
+                return;
+            }
+            
+            await markAttendance(student, status, 'attendanceMessage');
+            loadStudents();
+        });
+
+        // Mark attendance (quick buttons)
+        async function markAttendanceQuick(student, status) {
+            await markAttendance(student, status);
+            loadStudents();
+        }
+
+        // Mark attendance function
+        async function markAttendance(student, status, messageElementId = null) {
+            try {
+                const response = await fetch('/api/attendance', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ student, status })
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    const statusEmoji = status === 'present' ? '✓' : status === 'absent' ? '✗' : '⏱';
+                    const statusText = status === 'present' ? 'Present' : status === 'absent' ? 'Absent' : 'Late';
+                    if (messageElementId) {
+                        showMessage(messageElementId, `${statusEmoji} ${student} marked as ${statusText}`, 'success');
+                    }
+                    document.getElementById('studentSelect').value = '';
+                } else {
+                    if (messageElementId) {
+                        showMessage(messageElementId, data.error || 'Error marking attendance', 'error');
+                    }
+                }
+            } catch (error) {
+                if (messageElementId) {
+                    showMessage(messageElementId, 'Error marking attendance', 'error');
+                }
+            }
+        }
+
+        // Delete student
+        async function deleteStudent(name) {
+            if (!confirm(`🗑️ Are you sure you want to delete ${name}? This cannot be undone.`)) return;
+            
+            try {
+                const response = await fetch(`/api/students/${name}`, {
+                    method: 'DELETE'
+                });
+                
+                if (response.ok) {
+                    loadStudents();
+                } else {
+                    alert('Error deleting student');
+                }
+            } catch (error) {
+                alert('Error deleting student');
+            }
+        }
+
+        // Load report
+        async function loadReport() {
+            try {
+                const response = await fetch('/api/report');
+                const report = await response.json();
+                
+                const reportContainer = document.getElementById('reportContainer');
+                
+                if (Object.keys(report).length === 0) {
+                    reportContainer.innerHTML = '<div class="empty-state">No attendance records yet</div>';
+                } else {
+                    reportContainer.innerHTML = Object.entries(report).map(([student, stats]) => {
+                        const total = stats.total || 1;
+                        const attendancePercentage = Math.round((stats.present / total) * 100);
+                        
+                        return `
+                            <div class="report-card">
+                                <div class="report-name">${student}</div>
+                                <div class="report-stat">
+                                    <span class="stat-label">Present:</span>
+                                    <span class="stat-value stat-present">${stats.present}</span>
+                                </div>
+                                <div class="report-stat">
+                                    <span class="stat-label">Absent:</span>
+                                    <span class="stat-value stat-absent">${stats.absent}</span>
+                                </div>
+                                <div class="report-stat">
+                                    <span class="stat-label">Late:</span>
+                                    <span class="stat-value stat-late">${stats.late}</span>
+                                </div>
+                                <div class="report-stat">
+                                    <span class="stat-label">Total:</span>
+                                    <span class="stat-value">${stats.total}</span>
+                                </div>
+                                <div class="report-stat">
+                                    <span class="stat-label">Attendance %:</span>
+                                    <span class="stat-value" style="color: ${attendancePercentage >= 75 ? '#4CAF50' : attendancePercentage >= 50 ? '#ff9800' : '#f44336'};">${attendancePercentage}%</span>
+                                </div>
+                            </div>
+                        `;
+                    }).join('');
+                }
+            } catch (error) {
+                console.error('Error loading report:', error);
+            }
+        }
+
+        // Export attendance data
+        function exportAttendance() {
+            fetch('/api/report/export')
+                .then(response => response.json())
+                .then(data => {
+                    const jsonString = JSON.stringify(data, null, 2);
+                    const blob = new Blob([jsonString], { type: 'application/json' });
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = `attendance_${new Date().toISOString().split('T')[0]}.json`;
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                    URL.revokeObjectURL(url);
+                })
+                .catch(error => console.error('Error exporting:', error));
+        }
+
+        // Initialize
+        updateDate();
+        loadStudents();
+        
+        // Refresh stats and report every 2 seconds for real-time updates
+        setInterval(() => {
+            updateStats();
+            loadReport();
+        }, 2000);
+    </script>
+</body>
+</html>

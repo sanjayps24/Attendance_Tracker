@@ -1,0 +1,113 @@
+{
+  "students": {
+    "vinay": {
+      "added": "2026-01-28T15:18:20.796168"
+    },
+    "10-D_1": {
+      "name": "student",
+      "rollNo": "101",
+      "classId": "10-D",
+      "added": "2026-01-28T15:32:13.168015"
+    },
+    "10-B_1": {
+      "name": "ramesh",
+      "rollNo": "5",
+      "classId": "10-B",
+      "added": "2026-01-28T15:44:18.855419"
+    }
+  },
+  "records": [
+    {
+      "student": "hdfhdfd",
+      "date": "2026-01-28",
+      "time": "15:04:50",
+      "status": "present"
+    },
+    {
+      "student": "student",
+      "date": "2026-01-28",
+      "time": "15:09:20",
+      "status": "present"
+    },
+    {
+      "student": "hdfhdfd",
+      "date": "2026-01-28",
+      "time": "15:09:28",
+      "status": "present"
+    },
+    {
+      "student": "hdfhdfd",
+      "date": "2026-01-28",
+      "time": "15:09:29",
+      "status": "present"
+    },
+    {
+      "student": "student",
+      "date": "2026-01-28",
+      "time": "15:09:31",
+      "status": "present"
+    },
+    {
+      "student": "student",
+      "date": "2026-01-28",
+      "time": "15:09:31",
+      "status": "present"
+    },
+    {
+      "student": "student",
+      "date": "2026-01-28",
+      "time": "15:09:31",
+      "status": "present"
+    },
+    {
+      "student": "student",
+      "date": "2026-01-28",
+      "time": "15:09:32",
+      "status": "present"
+    },
+    {
+      "student": "hdfhdfd",
+      "date": "2026-01-28",
+      "time": "15:09:33",
+      "status": "absent"
+    },
+    {
+      "student": "hdfhdfd",
+      "date": "2026-01-28",
+      "time": "15:09:36",
+      "status": "late"
+    },
+    {
+      "student": "vinay",
+      "date": "2026-01-28",
+      "time": "15:18:33",
+      "status": "absent"
+    },
+    {
+      "student": "10-D_1",
+      "date": "2026-01-28",
+      "time": "15:32:22",
+      "status": "present"
+    },
+    {
+      "student": "10-B_1",
+      "date": "2026-01-28",
+      "time": "15:44:34",
+      "status": "present"
+    }
+  ],
+  "classes": {
+    "10-D": {
+      "className": "10",
+      "section": "D",
+      "created": "2026-01-28T15:31:59.406643",
+      "studentCount": 1
+    },
+    "10-B": {
+      "className": "10",
+      "section": "B",
+      "created": "2026-01-28T15:44:00.271689",
+      "studentCount": 1
+    }
+  }
+}

@@ -14,6 +14,24 @@
       "rollNo": "5",
       "classId": "10-B",
       "added": "2026-01-28T15:44:18.855419"
+    },
+    "10-C_1": {
+      "name": "lekhana",
+      "rollNo": "37",
+      "classId": "10-C",
+      "added": "2026-01-28T21:17:12.394459"
+    },
+    "10-A_1": {
+      "name": "suresh",
+      "rollNo": "25",
+      "classId": "10-A",
+      "added": "2026-01-28T21:19:08.030073"
+    },
+    "12-B_1": {
+      "name": "sharma",
+      "rollNo": "45",
+      "classId": "12-B",
+      "added": "2026-01-29T20:40:44.788289"
     }
   },
   "records": [
@@ -72,12 +90,6 @@
       "status": "absent"
     },
     {
-      "student": "hdfhdfd",
-      "date": "2026-01-28",
-      "time": "15:09:36",
-      "status": "late"
-    },
-    {
       "student": "vinay",
       "date": "2026-01-28",
       "time": "15:18:33",
@@ -94,6 +106,24 @@
       "date": "2026-01-28",
       "time": "15:44:34",
       "status": "present"
+    },
+    {
+      "student": "10-C_1",
+      "date": "2026-01-28",
+      "time": "21:17:33",
+      "status": "present"
+    },
+    {
+      "student": "10-A_1",
+      "date": "2026-01-28",
+      "time": "21:19:18",
+      "status": "absent"
+    },
+    {
+      "student": "12-B_1",
+      "date": "2026-01-29",
+      "time": "20:40:52",
+      "status": "present"
     }
   ],
   "classes": {
@@ -107,6 +137,24 @@
       "className": "10",
       "section": "B",
       "created": "2026-01-28T15:44:00.271689",
+      "studentCount": 1
+    },
+    "10-C": {
+      "className": "10",
+      "section": "C",
+      "created": "2026-01-28T21:16:54.865371",
+      "studentCount": 1
+    },
+    "10-A": {
+      "className": "10",
+      "section": "A",
+      "created": "2026-01-28T21:18:44.655912",
+      "studentCount": 1
+    },
+    "12-B": {
+      "className": "12",
+      "section": "B",
+      "created": "2026-01-29T20:40:11.914547",
       "studentCount": 1
     }
   }

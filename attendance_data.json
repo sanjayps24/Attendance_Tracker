@@ -124,6 +124,12 @@
       "date": "2026-01-29",
       "time": "20:40:52",
       "status": "present"
+    },
+    {
+      "student": "10-C_1",
+      "date": "2026-02-01",
+      "time": "20:54:52",
+      "status": "present"
     }
   ],
   "classes": {

@@ -3,6 +3,9 @@
 Track attendance. Stay organized. Save time.
 An interactive and simple attendance tracking system designed to make managing presence effortless and transparent.
 
+🚀 This project is deployed on Render and is accessible online: 
+ https://attendance-tracker-2-ed9s.onrender.com/
+
 ## ✨ What is Attendance Tracker?
 
 Attendance Tracker is a smart solution for recording, managing, and reviewing attendance data.

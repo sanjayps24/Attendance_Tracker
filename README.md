@@ -28,11 +28,17 @@ Whether you’re tracking students, employees, or event participants — this pr
 ## 🧠 How It Works (Simple Flow)
 
     1️⃣ Create or import a list of participants
+                    
                     |
+
     2️⃣ Mark attendance (Present / Absent / Late)
+                    
                     |
+
     3️⃣ Save & update records
+                   
                     |         
+
     4️⃣ View attendance history and summaries
 
 ### 📈 That’s it. No complicated steps.
@@ -52,11 +58,11 @@ Whether you’re tracking students, employees, or event participants — this pr
 
     attendance_tracker/
         │
-        ├── src/            # Source code
+        ├── src/          # Source code
         ├── assets/         # Images, icons, styles
-        ├── docs/           # Documentation
-        ├── README.md       # You are here 🙂
-        └── ...             # Other files
+        ├── docs/             # Documentation
+        ├── README.md           # You are here 🙂
+        └── requirements.txt     # Other files
 
 
 ## ⚙️ Installation & Setup
